@@ -1,0 +1,51 @@
+name: Build & Deploy 🚀
+
+on:
+  push:
+    branches: [main]
+    tags:
+      - 'v*'
+
+env:
+  ACR: ${{ secrets.ACR_NAME }}.azurecr.io
+  IMAGE: ${{ secrets.ACR_NAME }}.azurecr.io/flask-app:${{ github.ref_name }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - run: pip install -r requirements.txt
+      - run: pytest
+
+      - name: Build Docker image
+        run: docker build -t flask-app:${{ github.sha }} .
+
+      - name: Login to ACR
+        run: az acr login --name ${{ secrets.ACR_NAME }}
+
+      - name: Push Docker image
+        run: |
+          docker tag flask-app:${{ github.sha }} $IMAGE
+          docker push $IMAGE
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Web App for Containers
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+          images: $IMAGE
