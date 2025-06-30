@@ -44,6 +44,7 @@ jobs:
     #       az account show
 
     - name: Terraform Plan
+      id: plan
       if: inputs.destroy != 'true'
       working-directory: ./deploy/terraform
       run: |
@@ -64,36 +65,36 @@ jobs:
         ARM_TENANT_ID: ${{ secrets.STATE_TENANT_ID }}
 
 
-    - name: Terraform Apply
-      if: inputs.destroy != 'true'
-      working-directory: ./deploy/terraform
-      run: |
-        terraform apply -auto-approve \
-          -var="resource_group_name=${{ vars.RESOURCE_GROUP }}" \
-          -var="location=${{ vars.AZURE_LOCATION }}" \
-          -var="prefix=flaskdemo" \
-          -var="acr_name=${{ vars.ACR_NAME }}" \
-          -var="webapp_name=${{ vars.AZURE_WEBAPP_NAME }}" \
-          -var="infra_subscription_id=${{ secrets.INFRA_SUBSCRIPTION_ID }}"
-      env:
-        ARM_CLIENT_ID: ${{ secrets.STATE_CLIENT_ID }}
-        ARM_CLIENT_SECRET: ${{ secrets.STATE_CLIENT_SECRET }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.STATE_SUBSCRIPTION_ID }}
-        ARM_TENANT_ID: ${{ secrets.STATE_TENANT_ID }}
+    # - name: Terraform Apply
+    #   if: inputs.destroy != 'true'
+    #   working-directory: ./deploy/terraform
+    #   run: |
+    #     terraform apply -auto-approve \
+    #       -var="resource_group_name=${{ vars.RESOURCE_GROUP }}" \
+    #       -var="location=${{ vars.AZURE_LOCATION }}" \
+    #       -var="prefix=flaskdemo" \
+    #       -var="acr_name=${{ vars.ACR_NAME }}" \
+    #       -var="webapp_name=${{ vars.AZURE_WEBAPP_NAME }}" \
+    #       -var="infra_subscription_id=${{ secrets.INFRA_SUBSCRIPTION_ID }}"
+    #   env:
+    #     ARM_CLIENT_ID: ${{ secrets.STATE_CLIENT_ID }}
+    #     ARM_CLIENT_SECRET: ${{ secrets.STATE_CLIENT_SECRET }}
+    #     ARM_SUBSCRIPTION_ID: ${{ secrets.STATE_SUBSCRIPTION_ID }}
+    #     ARM_TENANT_ID: ${{ secrets.STATE_TENANT_ID }}
 
-    - name: Terraform Destroy
-      if: inputs.destroy == 'true'
-      working-directory: ./deploy/terraform
-      run: |
-        terraform destroy -auto-approve \
-          -var="resource_group_name=${{ vars.RESOURCE_GROUP }}" \
-          -var="location=${{ vars.AZURE_LOCATION }}" \
-          -var="prefix=flaskdemo" \
-          -var="acr_name=${{ vars.ACR_NAME }}" \
-          -var="webapp_name=${{ vars.AZURE_WEBAPP_NAME }}" \
-          -var="infra_subscription_id=${{ secrets.INFRA_SUBSCRIPTION_ID }}"
-      env:
-        ARM_CLIENT_ID: ${{ secrets.STATE_CLIENT_ID }}
-        ARM_CLIENT_SECRET: ${{ secrets.STATE_CLIENT_SECRET }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.STATE_SUBSCRIPTION_ID }}
-        ARM_TENANT_ID: ${{ secrets.STATE_TENANT_ID }}
+    # - name: Terraform Destroy
+    #   if: inputs.destroy == 'true'
+    #   working-directory: ./deploy/terraform
+    #   run: |
+    #     terraform destroy -auto-approve \
+    #       -var="resource_group_name=${{ vars.RESOURCE_GROUP }}" \
+    #       -var="location=${{ vars.AZURE_LOCATION }}" \
+    #       -var="prefix=flaskdemo" \
+    #       -var="acr_name=${{ vars.ACR_NAME }}" \
+    #       -var="webapp_name=${{ vars.AZURE_WEBAPP_NAME }}" \
+    #       -var="infra_subscription_id=${{ secrets.INFRA_SUBSCRIPTION_ID }}"
+    #   env:
+    #     ARM_CLIENT_ID: ${{ secrets.STATE_CLIENT_ID }}
+    #     ARM_CLIENT_SECRET: ${{ secrets.STATE_CLIENT_SECRET }}
+    #     ARM_SUBSCRIPTION_ID: ${{ secrets.STATE_SUBSCRIPTION_ID }}
+    #     ARM_TENANT_ID: ${{ secrets.STATE_TENANT_ID }}
