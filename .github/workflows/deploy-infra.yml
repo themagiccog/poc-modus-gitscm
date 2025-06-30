@@ -49,8 +49,8 @@ jobs:
       working-directory: ./deploy/terraform
       run: |
           ls -ltra .
-          fine .
-          terraform -chdir=./deploy/terraform plan \
+          find .
+          terraform plan \
           -var="resource_group_name=${{ vars.RESOURCE_GROUP }}" \
           -var="location=${{ vars.AZURE_LOCATION }}" \
           -var="prefix=flaskdemo" \
