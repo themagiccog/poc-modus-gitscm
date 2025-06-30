@@ -23,9 +23,20 @@ jobs:
         terraform_version: 1.6.6
 
     - name: Azure Login
-      uses: azure/login@v1
+      uses: azure/login@v2
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Azure CLI script
+      uses: azure/cli@v2
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az account show
+
+    - name: AzSHow
+      working-directory: ./deploy/terraform
+      run: az account show
 
     - name: Terraform Init
       working-directory: ./deploy/terraform
