@@ -30,6 +30,11 @@ jobs:
     - name: Terraform Init
       working-directory: ./deploy/terraform
       run: terraform init
+      env:
+        ARM_CLIENT_ID: ${{ secrets.STATE_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.STATE_CLIENT_SECRET }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.STATE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.STATE_TENANT_ID }}
 
     - name: Terraform Plan
       if: inputs.destroy != 'true'
