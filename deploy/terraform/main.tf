@@ -27,6 +27,7 @@ resource "azurerm_app_service_plan" "plan" {
     size = "F1"
   }
   kind = "Linux"
+  reserved = true  # Required for Linux plans
 }
 
 resource "azurerm_linux_web_app" "app" {
