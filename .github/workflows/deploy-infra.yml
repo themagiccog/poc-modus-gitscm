@@ -12,6 +12,9 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     environment: production
+    defaults:
+      run:
+        working-directory: ./terraform
 
     steps:
     - name: Checkout code
@@ -21,9 +24,10 @@ jobs:
       uses: hashicorp/setup-terraform@v3
       with:
         terraform_version: 1.6.6
+        terraform_wrapper: true
 
     - name: Terraform Init
-      working-directory: ./deploy/terraform
+      # working-directory: ./deploy/terraform
       run: terraform init
       env:
         ARM_CLIENT_ID: ${{ secrets.STATE_CLIENT_ID }}
@@ -48,7 +52,7 @@ jobs:
       if: inputs.destroy != 'true'
       # working-directory: ./deploy/terraform
       run: |
-          terraform -chdir=./deploy/terraform plan \
+          terraform plan \
           -var="resource_group_name=${{ vars.RESOURCE_GROUP }}" \
           -var="location=${{ vars.AZURE_LOCATION }}" \
           -var="prefix=flaskdemo" \
