@@ -39,7 +39,8 @@ jobs:
     - name: Terraform Plan
       if: inputs.destroy != 'true'
       working-directory: ./deploy/terraform
-      run: terraform plan \
+      run: |
+          terraform plan \
           -var="resource_group_name=${{ vars.RESOURCE_GROUP }}" \
           -var="location=${{ vars.AZURE_LOCATION }}" \
           -var="prefix=flaskdemo" \
