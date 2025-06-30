@@ -48,7 +48,7 @@ jobs:
       if: inputs.destroy != 'true'
       working-directory: ./deploy/terraform
       run: |
-          terraform plan -chdir=./deploy/terraform plan \
+          terraform -chdir=./deploy/terraform plan \
           -var="resource_group_name=${{ vars.RESOURCE_GROUP }}" \
           -var="location=${{ vars.AZURE_LOCATION }}" \
           -var="prefix=flaskdemo" \
