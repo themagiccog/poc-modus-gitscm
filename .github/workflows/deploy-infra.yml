@@ -51,7 +51,7 @@ jobs:
       id: plan
       if: inputs.destroy != 'true'
       # working-directory: ./deploy/terraform
-      run: |
+      run: >
           terraform plan \
           -var="resource_group_name=${{ vars.RESOURCE_GROUP }}" \
           -var="location=${{ vars.AZURE_LOCATION }}" \
