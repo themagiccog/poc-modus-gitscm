@@ -1,18 +1,19 @@
 name: Build & Deploy 🚀
 
-# on:
-#   push:
-#     branches: [main]
-#     tags:
-#       - 'v*'
+on:
+  push:
+    branches: [main]
+    tags:
+      - 'v*'
 
 env:
-  ACR: ${{ secrets.ACR_NAME }}.azurecr.io
-  IMAGE: ${{ secrets.ACR_NAME }}.azurecr.io/flask-app:${{ github.ref_name }}
+  ACR: ${{ vars.ACR_NAME }}.azurecr.io
+  IMAGE: ${{ vars.ACR_NAME }}.azurecr.io/flask-app:${{ github.ref_name }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - uses: actions/checkout@v4
 
@@ -28,7 +29,7 @@ jobs:
         run: docker build -t flask-app:${{ github.sha }} .
 
       - name: Login to ACR
-        run: az acr login --name ${{ secrets.ACR_NAME }}
+        run: az acr login --name ${{ vars.ACR_NAME }}
 
       - name: Push Docker image
         run: |
@@ -47,5 +48,5 @@ jobs:
       - name: Deploy to Web App for Containers
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+          app-name: ${{ vars.AZURE_WEBAPP_NAME }}
           images: $IMAGE
