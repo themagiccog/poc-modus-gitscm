@@ -46,11 +46,9 @@ jobs:
     - name: Terraform Plan
       id: plan
       if: inputs.destroy != 'true'
-      working-directory: ./deploy/terraform
+      # working-directory: ./deploy/terraform
       run: |
-          ls -ltra .
-          find .
-          terraform plan \
+          terraform -chdir=./deploy/terraform plan \
           -var="resource_group_name=${{ vars.RESOURCE_GROUP }}" \
           -var="location=${{ vars.AZURE_LOCATION }}" \
           -var="prefix=flaskdemo" \
