@@ -51,8 +51,19 @@ jobs:
       id: plan
       if: inputs.destroy != 'true'
       # working-directory: ./deploy/terraform
-      run: terraform plan -var="resource_group_name=${{ vars.RESOURCE_GROUP }}" -var="location=${{ vars.AZURE_LOCATION }}" -var="prefix=flaskdemo" -var="acr_name=${{ vars.ACR_NAME }}" -var="webapp_name=${{ vars.AZURE_WEBAPP_NAME }}" -var="infra_client_id=${{ secrets.ARM_CLIENT_ID }}" -var="infra_client_secret=${{ secrets.ARM_CLIENT_SECRET }}" -var="infra_subscription_id=${{ secrets.ARM_SUBSCRIPTION_ID }}" -var="infra_tenant_id=${{ secrets.ARM_TENANT_ID }}"
+      run: |
+          terraform plan \
+          -var="resource_group_name=${{ vars.RESOURCE_GROUP }}" \
+          -var="location=${{ vars.AZURE_LOCATION }}" \
+          -var="prefix=flaskdemo" \
+          -var="acr_name=${{ vars.ACR_NAME }}" \
+          -var="webapp_name=${{ vars.AZURE_WEBAPP_NAME }}" \
+          -var="infra_client_id=${{ secrets.ARM_CLIENT_ID }}" \
+          -var="infra_client_secret=${{ secrets.ARM_CLIENT_SECRET }}" \
+          -var="infra_subscription_id=${{ secrets.ARM_SUBSCRIPTION_ID }}" \
+          -var="infra_tenant_id=${{ secrets.ARM_TENANT_ID }}"
       env:
+        TF_LOG: DEBUG
         ARM_CLIENT_ID: ${{ secrets.STATE_CLIENT_ID }}
         ARM_CLIENT_SECRET: ${{ secrets.STATE_CLIENT_SECRET }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.STATE_SUBSCRIPTION_ID }}
