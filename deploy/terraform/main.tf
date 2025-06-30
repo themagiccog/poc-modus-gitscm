@@ -1,42 +1,44 @@
-provider "azurerm" {
-  features {}
-}
 
 resource "azurerm_resource_group" "rg" {
-  name     = var.prefix
+  name     = var.resource_group_name
   location = var.location
 }
 
 resource "azurerm_container_registry" "acr" {
-  name                = "${var.prefix}acr"
+  name                = var.acr_name
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
   sku                 = "Basic"
   admin_enabled       = true
-  resource_group_name = azurerm_resource_group.rg.name
 }
 
 resource "azurerm_app_service_plan" "plan" {
   name                = "${var.prefix}-plan"
-  location            = var.location
+  location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  kind                = "Linux"
-  reserved            = true
   sku {
-    tier = "Basic"
-    size = "B1"
+    tier = "Free"
+    size = "F1"
   }
+  kind = "Linux"
 }
 
-resource "azurerm_web_app" "app" {
+resource "azurerm_linux_web_app" "app" {
   name                = var.webapp_name
-  location            = var.location
+  location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  app_service_plan_id = azurerm_app_service_plan.plan.id
+  service_plan_id     = azurerm_app_service_plan.plan.id
 
   site_config {
     linux_fx_version = "DOCKER|${azurerm_container_registry.acr.login_server}/flask-app:latest"
   }
 
-  identity {
-    type = "SystemAssigned"
+  app_settings = {
+    WEBSITES_PORT = "8000"
+    CUSTOM_MESSAGE = "Hello from Terraform"
+    DEPLOY_ENV = "terraform"
+    DOCKER_REGISTRY_SERVER_URL      = "https://${azurerm_container_registry.acr.login_server}"
+    DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.acr.admin_username
+    DOCKER_REGISTRY_SERVER_PASSWORD = azurerm_container_registry.acr.admin_password
   }
 }

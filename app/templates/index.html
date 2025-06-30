@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple To-Do List</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            max-width: 100%;
+            height: auto;
+            max-height: 80px;
+        }
+        
+        h1 {
+            color: #0057a6; /* Changed to match Indegene blue */
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #0057a6; /* Changed to match Indegene blue */
+        }
+        
+        form {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: #0057a6; /* Changed to match Indegene blue */
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #003b70; /* Darker shade of Indegene blue */
+        }
+        
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        li {
+            background-color: white;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        li a {
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 3px;
+            transition: background-color 0.3s;
+        }
+        
+        li a:hover {
+            background-color: #f8d7da;
+        }
+        
+        /* Add some pink accents to match Indegene's logo */
+        .accent {
+            color: #e9168c;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='images/modus-create.png') }}" class="logo" alt="Indegene Logo">
+    </div>
+    <h1>To-Do List</h1>
+        <div>
+      <h3> This is message from env: <em>{{ custom_message }}</em> </h3>
+      <h5> Deploy Environment: <em>{{ deploy_env }}</em> </h5>
+    </div>
+    <form method="post">
+        <input type="text" name="todo" placeholder="Enter a task">
+        <button type="submit">Add</button>
+    </form>
+    <ul>
+        {% for item in todos %}
+            <li>
+                <span>{{ item }}</span> 
+                <a href="{{ url_for('delete', idx=loop.index0) }}">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>

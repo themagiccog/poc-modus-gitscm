@@ -7,7 +7,7 @@ patch=$((patch + 1))
 new="$major.$minor.$patch"
 
 echo "$new" > version.txt
-echo -e "## [$new] – $(date +%F)\n- New release" >> changelog.md
+echo -e "## [$new] - $(date +%F)\n- New release" >> changelog.md
 
 git add version.txt changelog.md
 git commit -m "chore(release): v$new"

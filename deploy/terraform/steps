@@ -1,0 +1,13 @@
+# Pre Req
+
+Create Service Principal
+
+```bash
+az ad sp create-for-rbac \
+  --name "my-github-sp" \
+  --role Contributor \
+  --scopes /subscriptions/<your-subscription-id> \
+  --sdk-auth
+```
+
+Add it as a Secret in the Github repo (create an env and name it production, then create secret there)
