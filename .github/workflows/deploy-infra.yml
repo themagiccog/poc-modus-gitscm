@@ -1,4 +1,4 @@
-name: Terraform Infra Control
+name: 🛠️ Infra Management - Terraform
 
 on:
   workflow_dispatch:
