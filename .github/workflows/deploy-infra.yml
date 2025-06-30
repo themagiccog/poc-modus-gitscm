@@ -48,6 +48,8 @@ jobs:
       if: inputs.destroy != 'true'
       working-directory: ./deploy/terraform
       run: |
+          ls -ltra .
+          fine .
           terraform -chdir=./deploy/terraform plan \
           -var="resource_group_name=${{ vars.RESOURCE_GROUP }}" \
           -var="location=${{ vars.AZURE_LOCATION }}" \
