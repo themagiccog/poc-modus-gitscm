@@ -28,6 +28,8 @@ resource "azurerm_service_plan" "plan" {
 
 resource "azurerm_linux_web_app" "app" {
   provider = azurerm.infra
+
+  depends_on = [azurerm_container_registry.acr]
   
   name                = var.webapp_name
   location            = azurerm_resource_group.rg.location
@@ -36,6 +38,7 @@ resource "azurerm_linux_web_app" "app" {
 
   site_config {
     container_registry_use_managed_identity = false
+    always_on               = false
     application_stack {
       docker_image_name     = "${azurerm_container_registry.acr.login_server}/flask-app:latest"
       docker_registry_url   = "https://${azurerm_container_registry.acr.login_server}"
