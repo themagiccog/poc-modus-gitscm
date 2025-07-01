@@ -23,7 +23,10 @@ jobs:
           python-version: '3.13'
 
       - run: pip install -r requirements.txt
+        working-directory: ./app
+
       - run: pytest
+        working-directory: ./app
 
       - name: Build Docker image
         run: docker build -t flask-app:${{ github.sha }} .
