@@ -47,7 +47,7 @@ jobs:
   build:
     needs: release
     runs-on: ubuntu-latest
-    if: ${{ needs.release.outputs.published }}
+    # if: ${{ needs.release.outputs.published }}
     environment: production
     env:
       IMAGE_TAG: ${{ needs.release.outputs.version || 'latest' }}
