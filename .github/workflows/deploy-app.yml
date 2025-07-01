@@ -78,9 +78,9 @@ jobs:
 
       - name: Push Docker image to ACR
         run: |
-          echo "Image Tag: $IMAGE_TAG"  
-          docker tag flask-app:${{ github.sha }} $ACR/flask-app:$IMAGE_TAG
-          docker push $ACR/flask-app:$IMAGE_TAG
+          echo "Image Tag: ${IMAGE_TAG}"   
+          docker tag flask-app:${{ github.sha }} $ACR/flask-app:${IMAGE_TAG}
+          docker push ${ACR}/flask-app:${IMAGE_TAG}
 
   deploy:
     needs: [release, build]
