@@ -46,7 +46,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     env:
-      IMAGE_TAG: ${{ vars.ACR_NAME }}.azurecr.io/flask-app:${{ github.ref_name }} #${{ needs.release.outputs.version }}
+      IMAGE_TAG: '1.0.0' #${{ needs.release.outputs.version }}
+      IMAGE: ${{ vars.ACR_NAME }}.azurecr.io/flask-app
       ACR: ${{ vars.ACR_NAME }}.azurecr.io
     steps:
       - uses: actions/checkout@v4
@@ -63,7 +64,7 @@ jobs:
         working-directory: ./app
 
       - name: Build Docker image
-        run: docker build -t flask-app:$IMAGE_TAG .
+        run: docker build -t flask-app:${{ github.sha }} .
 
       - name: Azure Login
         uses: azure/login@v2
@@ -75,7 +76,7 @@ jobs:
 
       - name: Push Docker image to ACR
         run: |
-          docker tag flask-app:$IMAGE_TAG $ACR/flask-app:$IMAGE_TAG
+          docker tag flask-app:${{ github.sha }} $ACR/flask-app:$IMAGE_TAG
           docker push $ACR/flask-app:$IMAGE_TAG
 
   deploy:
