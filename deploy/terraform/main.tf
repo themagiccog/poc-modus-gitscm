@@ -16,18 +16,14 @@ resource "azurerm_container_registry" "acr" {
   admin_enabled       = true
 }
 
-resource "azurerm_app_service_plan" "plan" {
-  provider = azurerm.infra
-
+resource "azurerm_service_plan" "plan" {
+  provider            = azurerm.infra
   name                = "${var.prefix}-plan"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  sku {
-    tier = "Free"
-    size = "F1"
-  }
-  kind = "Linux"
-  reserved = true  # Required for Linux plans
+
+  os_type   = "Linux"      # replaces 'kind' and 'reserved'
+  sku_name  = "F1"         # replaces sku { tier, size }
 }
 
 resource "azurerm_linux_web_app" "app" {
