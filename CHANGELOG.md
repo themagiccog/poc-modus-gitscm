@@ -1,3 +1,9 @@
+## [1.1.3](https://github.com/themagiccog/poc-modus-gitscm/compare/v1.1.2...v1.1.3) (2025-07-01)
+
+### Bug Fixes
+
+* add manual trigger input for workflow and include version.txt in release assets ([8e43077](https://github.com/themagiccog/poc-modus-gitscm/commit/8e43077956dd4b96007be112ca5b344d9c4506de))
+
 ## [1.1.2](https://github.com/themagiccog/poc-modus-gitscm/compare/v1.1.1...v1.1.2) (2025-07-01)
 
 ### Bug Fixes
