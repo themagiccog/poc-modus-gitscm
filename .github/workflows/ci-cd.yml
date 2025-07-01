@@ -71,11 +71,11 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ vars.AZURE_WEBAPP_NAME }}
-          images: $IMAGE
+          images: ${{ vars.ACR_NAME }}.azurecr.io/flask-app:${{ github.ref_name }} #$IMAGE
 
-      - name: Deploy to Web App
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: modus-create-app
-          slot-name: production
-          images: modusacr13543.azurecr.io/flask-app:main
+      # - name: Deploy to Web App
+      #   uses: azure/webapps-deploy@v2
+      #   with:
+      #     app-name: modus-create-app
+      #     slot-name: production
+      #     images: modusacr13543.azurecr.io/flask-app:main
