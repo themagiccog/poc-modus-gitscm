@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     env:
-      IMAGE_TAG: ${{ secrets.ACR_NAME }}.azurecr.io/flask-app:${{ github.ref_name }} #${{ needs.release.outputs.version }}
+      IMAGE_TAG: ${{ vars.ACR_NAME }}.azurecr.io/flask-app:${{ github.ref_name }} #${{ needs.release.outputs.version }}
       ACR: ${{ vars.ACR_NAME }}.azurecr.io
     steps:
       - uses: actions/checkout@v4
