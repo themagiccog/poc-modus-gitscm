@@ -1,3 +1,9 @@
+## [1.0.5](https://github.com/themagiccog/poc-modus-gitscm/compare/v1.0.4...v1.0.5) (2025-07-01)
+
+### Bug Fixes
+
+* testing ([166e092](https://github.com/themagiccog/poc-modus-gitscm/commit/166e092988275f129eda54aff7c96a02ce16d6f9))
+
 ## [1.0.4](https://github.com/themagiccog/poc-modus-gitscm/compare/v1.0.3...v1.0.4) (2025-07-01)
 
 ### Bug Fixes
