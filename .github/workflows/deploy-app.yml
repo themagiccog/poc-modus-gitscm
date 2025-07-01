@@ -43,6 +43,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
 
+      - name: Echo release version
+        run: |
+          echo "New release version: ${{ steps.semantic.outputs.release-version }}"
           
   build:
     needs: release
