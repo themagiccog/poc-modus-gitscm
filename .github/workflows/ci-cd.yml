@@ -31,6 +31,18 @@ jobs:
       - name: Build Docker image
         run: docker build -t flask-app:${{ github.sha }} .
 
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Azure CLI script
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az account show
+
       - name: Login to ACR
         run: az acr login --name ${{ vars.ACR_NAME }}
 
