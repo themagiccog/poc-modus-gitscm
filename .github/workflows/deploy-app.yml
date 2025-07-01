@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.semantic.outputs.release-version }}
+      published: ${{ steps.semantic.outputs.new-release-published }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -46,6 +47,7 @@ jobs:
   build:
     needs: release
     runs-on: ubuntu-latest
+    if: ${{ release.outputs.published }}
     environment: production
     env:
       IMAGE_TAG: ${{ needs.release.outputs.version }}
@@ -78,7 +80,8 @@ jobs:
 
       - name: Push Docker image to ACR
         run: |
-          echo "Image Tag: ${IMAGE_TAG}"   
+          echo "Image Tag: ${IMAGE_TAG}, ${{ env.IMAGE_TAG }}"  
+          echo "New release: ${{ needs.release.outputs.published }}" 
           docker tag flask-app:${{ github.sha }} $ACR/flask-app:${{ env.IMAGE_TAG }}
           docker push ${{ env.ACR }}/flask-app:${{ env.IMAGE_TAG }}
 
