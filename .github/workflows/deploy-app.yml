@@ -47,14 +47,17 @@ jobs:
   build:
     needs: release
     runs-on: ubuntu-latest
-    # if: ${{ release.outputs.published }}
+    if: ${{ needs.release.outputs.published }}
     environment: production
     env:
-      IMAGE_TAG: ${{ needs.release.outputs.version }}
+      IMAGE_TAG: ${{ needs.release.outputs.version || 'latest' }}
       IMAGE: ${{ vars.ACR_NAME }}.azurecr.io/flask-app
       ACR: ${{ vars.ACR_NAME }}.azurecr.io
     steps:
       - uses: actions/checkout@v4
+
+      - name: Echo version
+        run: echo "Image tag is $IMAGE_TAG"
 
       - name: Set up Python
         uses: actions/setup-python@v5
