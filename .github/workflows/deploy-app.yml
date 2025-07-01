@@ -3,6 +3,13 @@ name: 🚀 Build & Deploy
 on:
   push:
     branches: [main]
+    paths: [app]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'manual trigger'
+        required: false
+        default: ''
   # semantic-release will create tags
   # no need to trigger this workflow on tag push directly
 
