@@ -1,3 +1,9 @@
+## [1.2.1](https://github.com/themagiccog/poc-modus-gitscm/compare/v1.2.0...v1.2.1) (2025-07-02)
+
+### Bug Fixes
+
+* update custom message in deployment and modify header text in index.html ([2580b52](https://github.com/themagiccog/poc-modus-gitscm/commit/2580b52d7dae78a99a62b471584150935646d7e0))
+
 ## [1.2.0](https://github.com/themagiccog/poc-modus-gitscm/compare/v1.1.3...v1.2.0) (2025-07-02)
 
 ### Features
