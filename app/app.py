@@ -20,6 +20,7 @@ build_version = os.getenv("BUILD_VERSION", "No build version set.")
 logging.info(
     f"Starting Flask app with CUSTOM_MESSAGE='{custom_message}' "
     f"and DEPLOY_ENV='{deploy_env}'"
+    f"and BUILD_VERSION='{build_version}'"
 )
 
 
@@ -36,7 +37,8 @@ def index():
         "index.html",
         todos=todos,
         custom_message=custom_message,
-        deploy_env=deploy_env
+        deploy_env=deploy_env,
+        build_version=build_version
     )
 
 

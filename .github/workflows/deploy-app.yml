@@ -3,7 +3,7 @@ name: 🚀 Build & Deploy
 on:
   push:
     branches: [main]
-    paths: [app]
+    paths: [app/**]
   workflow_dispatch:
     inputs:
       version:
