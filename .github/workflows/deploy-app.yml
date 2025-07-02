@@ -123,10 +123,11 @@ jobs:
 
       - name: Set Web App Environment Variables
         run: |
+          echo "Custom Message: $(git log -1 --pretty=%B)"
           az webapp config appsettings set \
             --name ${{ vars.AZURE_WEBAPP_NAME }} \
             --resource-group ${{ vars.RESOURCE_GROUP }} \
-            --settings CUSTOM_MESSAGE=$(git log -1 --pretty=%B) DEPLOY_ENV=${{ job.environment }} BUILD_VERSION=${{ env.BUILD_VERSION }}
+            --settings CUSTOM_MESSAGE="Welcome, good to have you here" DEPLOY_ENV=${{ job.environment.name || 'prod' }} BUILD_VERSION=${{ env.BUILD_VERSION }}
 
       - name: Deploy to Azure Web App (Linux Container)
         uses: azure/webapps-deploy@v2
