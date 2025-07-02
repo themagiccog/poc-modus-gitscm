@@ -47,10 +47,10 @@ resource "azurerm_linux_web_app" "app" {
   site_config {
     container_registry_use_managed_identity = false
     always_on               = false
-    linux_fx_version = " DOCKER|${azurerm_container_registry.acr.login_server}/flask-app:latest"
+    linux_fx_version = " DOCKER|${data.azurerm_container_registry.acr.login_server}/flask-app:latest"
     application_stack {
-      docker_image_name     = "${azurerm_container_registry.acr.login_server}/flask-app:latest"
-      docker_registry_url   = "https://${azurerm_container_registry.acr.login_server}"
+      docker_image_name     = "${data.azurerm_container_registry.acr.login_server}/flask-app:latest"
+      docker_registry_url   = "https://${data.azurerm_container_registry.acr.login_server}"
       docker_registry_username = data.azurerm_container_registry.acr.admin_username
       docker_registry_password = data.azurerm_container_registry.acr.admin_password
     }
