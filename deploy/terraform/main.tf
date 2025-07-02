@@ -6,15 +6,23 @@ resource "azurerm_resource_group" "rg" {
   location = var.location
 }
 
-resource "azurerm_container_registry" "acr" {
-  provider = azurerm.infra
+# #if New ACR
+# resource "azurerm_container_registry" "acr" {
+#   provider = azurerm.infra
 
-  name                = var.acr_name
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  sku                 = "Basic"
-  admin_enabled       = true
+#   name                = var.acr_name
+#   resource_group_name = azurerm_resource_group.rg.name
+#   location            = azurerm_resource_group.rg.location
+#   sku                 = "Basic"
+#   admin_enabled       = true
+# }
+
+data "azurerm_container_registry" "acr" {
+  provider            = azurerm.infra
+  name                = "az4africa"
+  resource_group_name = "core-rg"
 }
+
 
 resource "azurerm_service_plan" "plan" {
   provider            = azurerm.infra
@@ -43,9 +51,13 @@ resource "azurerm_linux_web_app" "app" {
     application_stack {
       docker_image_name     = "${azurerm_container_registry.acr.login_server}/flask-app:latest"
       docker_registry_url   = "https://${azurerm_container_registry.acr.login_server}"
-      docker_registry_username = azurerm_container_registry.acr.admin_username
-      docker_registry_password = azurerm_container_registry.acr.admin_password
+      docker_registry_username = data.azurerm_container_registry.acr.admin_username
+      docker_registry_password = data.azurerm_container_registry.acr.admin_password
     }
+  }
+
+  lifecycle {
+    ignore_changes = [ site_config[0].linux_fx_version ]
   }
 
   app_settings = {
