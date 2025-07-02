@@ -59,9 +59,9 @@ resource "azurerm_linux_web_app" "app" {
   site_config {
     container_registry_use_managed_identity = false
     always_on               = false
-    # linux_fx_version = " DOCKER|${data.azurerm_container_registry.acr.login_server}/flask-app:0.0.1"
+    # linux_fx_version = " DOCKER|${data.azurerm_container_registry.acr.login_server}/flask-app:latest"
     application_stack {
-      docker_image_name     = "${data.azurerm_container_registry.acr.login_server}/flask-app:0.0.1"
+      docker_image_name     = "${data.azurerm_container_registry.acr.login_server}/flask-app:latest"
       docker_registry_url   = "https://${data.azurerm_container_registry.acr.login_server}"
       ## Below not needed as we are using Managed Identity
       # docker_registry_username = data.azurerm_container_registry.acr.admin_username
