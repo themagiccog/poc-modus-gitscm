@@ -7,3 +7,10 @@ provider "azurerm" {
 
   features {}
 }
+
+provider "azurerm" {
+  alias           = "state"
+  # the creds are already in environment variables
+  features {}
+
+}

@@ -18,7 +18,7 @@ resource "azurerm_resource_group" "rg" {
 # }
 
 data "azurerm_container_registry" "acr" {
-  # provider            = azurerm.infra
+  provider            = azurerm.state
   name                = "az4africa"
   resource_group_name = "core-rg"
 
