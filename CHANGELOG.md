@@ -1,3 +1,9 @@
+## [1.2.4](https://github.com/themagiccog/poc-modus-gitscm/compare/v1.2.3...v1.2.4) (2025-07-02)
+
+### Bug Fixes
+
+* update Azure credentials reference in workflow ([33dd031](https://github.com/themagiccog/poc-modus-gitscm/commit/33dd03189d9a2baba91fb1a29ce228d0b023ecc3))
+
 ## [1.2.3](https://github.com/themagiccog/poc-modus-gitscm/compare/v1.2.2...v1.2.3) (2025-07-02)
 
 ### Bug Fixes
