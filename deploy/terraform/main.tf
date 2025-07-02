@@ -51,22 +51,27 @@ resource "azurerm_linux_web_app" "app" {
   resource_group_name = azurerm_resource_group.rg.name
   service_plan_id     = azurerm_service_plan.plan.id
 
+  # Specify Managed Identity with its id (Type is UserAssigned)
   identity {
     type         = "UserAssigned"
     identity_ids = [data.azurerm_user_assigned_identity.identity.id]
   }
 
   site_config {
+    # Use the Managed Identity for Authentication to ACR (true), specify Client id of the Managed Identity
+    # This is needed to pull the image from ACR without using username and password
     container_registry_use_managed_identity         = true
     container_registry_managed_identity_client_id   = data.azurerm_user_assigned_identity.identity.client_id
 
+    # always on = false, needs to be config'd when using Free tier
     always_on               = false
-    # linux_fx_version = " DOCKER|${data.azurerm_container_registry.acr.login_server}/flask-app:latest"
+    
+    # the app will fail first time, because there is no image to deploy. But when webapp is deployed, it will be resolved.
     application_stack {
-      docker_image_name     = "flask-app:1.3.0"
+      docker_image_name     = "flask-app:0.0.1"
       docker_registry_url   = "https://${data.azurerm_container_registry.acr.login_server}"
-      ## Below not needed as we are using Managed Identity
       
+      ## Below not needed as we are using Managed Identity
       # docker_registry_username = data.azurerm_container_registry.acr.admin_username
       # docker_registry_password = data.azurerm_container_registry.acr.admin_password
     }
