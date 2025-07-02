@@ -1,3 +1,9 @@
+## [1.2.2](https://github.com/themagiccog/poc-modus-gitscm/compare/v1.2.1...v1.2.2) (2025-07-02)
+
+### Bug Fixes
+
+* update deployment environment variable reference in workflow ([703f3f3](https://github.com/themagiccog/poc-modus-gitscm/commit/703f3f3743113c90c5ccd9f6684c94676add7d1a))
+
 ## [1.2.1](https://github.com/themagiccog/poc-modus-gitscm/compare/v1.2.0...v1.2.1) (2025-07-02)
 
 ### Bug Fixes
