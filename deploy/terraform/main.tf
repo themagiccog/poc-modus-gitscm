@@ -57,7 +57,9 @@ resource "azurerm_linux_web_app" "app" {
   }
 
   site_config {
-    container_registry_use_managed_identity = true
+    container_registry_use_managed_identity         = true
+    container_registry_managed_identity_client_id   = data.azurerm_user_assigned_identity.identity.client_id
+
     always_on               = false
     # linux_fx_version = " DOCKER|${data.azurerm_container_registry.acr.login_server}/flask-app:latest"
     application_stack {
