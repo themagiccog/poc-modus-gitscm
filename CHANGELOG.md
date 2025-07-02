@@ -1,3 +1,15 @@
+## [1.3.0](https://github.com/themagiccog/poc-modus-gitscm/compare/v1.2.4...v1.3.0) (2025-07-02)
+
+### Features
+
+* add output for image URL in Terraform configuration ([7f60c6a](https://github.com/themagiccog/poc-modus-gitscm/commit/7f60c6ac299a6f375d1d4f341d8ad70e5c003930))
+* add user assigned identity to Azure Linux web app configuration ([5fa8f35](https://github.com/themagiccog/poc-modus-gitscm/commit/5fa8f359226ab243a485c77dddcea00cb7e40c08))
+
+### Bug Fixes
+
+* enable managed identity for container registry in Azure Linux web app configuration ([e36f8a0](https://github.com/themagiccog/poc-modus-gitscm/commit/e36f8a076c2c0fefd227105aac38d4fea6fec58e))
+* update Docker image version to use 'latest' tag for Azure Linux web app ([42dc66a](https://github.com/themagiccog/poc-modus-gitscm/commit/42dc66a42ecd7f0a5fd3d0fda74c4e5993981cfc))
+
 ## [1.2.4](https://github.com/themagiccog/poc-modus-gitscm/compare/v1.2.3...v1.2.4) (2025-07-02)
 
 ### Bug Fixes
