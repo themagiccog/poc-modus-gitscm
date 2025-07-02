@@ -1,3 +1,14 @@
+## [1.2.0](https://github.com/themagiccog/poc-modus-gitscm/compare/v1.1.3...v1.2.0) (2025-07-02)
+
+### Features
+
+* add build version and timestamp to deployment workflow and update HTML template ([31802be](https://github.com/themagiccog/poc-modus-gitscm/commit/31802be5a1f33a8a681e5d50d40a121918f82dfc))
+
+### Bug Fixes
+
+* update logo alt text for clarity ([c712cc9](https://github.com/themagiccog/poc-modus-gitscm/commit/c712cc9a5145fcb1a4c7b564b6578d415743e605))
+* update workflow path to include all app subdirectories and log build version in Flask app ([645fa93](https://github.com/themagiccog/poc-modus-gitscm/commit/645fa93b5eeb46a84af35b172bdbedda8d2dc98f))
+
 ## [1.1.3](https://github.com/themagiccog/poc-modus-gitscm/compare/v1.1.2...v1.1.3) (2025-07-01)
 
 ### Bug Fixes
