@@ -37,7 +37,7 @@ resource "azurerm_service_plan" "plan" {
 resource "azurerm_linux_web_app" "app" {
   provider = azurerm.infra
 
-  depends_on = [azurerm_container_registry.acr]
+  depends_on = [data.azurerm_container_registry.acr]
   
   name                = var.webapp_name
   location            = azurerm_resource_group.rg.location
