@@ -4,9 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       destroy:
-        description: "Set to true to destroy infrastructure"
+        description: "☑️ to destroy infrastructure"
         required: false
-        default: "false"
+        default: false
+        type: boolean
 
 jobs:
   terraform:
@@ -38,7 +39,7 @@ jobs:
 
     - name: Terraform Plan
       id: plan
-      if: inputs.destroy != 'true'
+      if: inputs.destroy != true
       # working-directory: ./deploy/terraform
       run: |
           terraform plan \
@@ -60,7 +61,7 @@ jobs:
 
 
     - name: Terraform Apply
-      if: inputs.destroy != 'true'
+      if: inputs.destroy != true
       working-directory: ./deploy/terraform
       run: |
         terraform apply -auto-approve \
@@ -81,7 +82,7 @@ jobs:
         ARM_TENANT_ID: ${{ secrets.STATE_TENANT_ID }}
 
     - name: Terraform Destroy
-      if: inputs.destroy == 'true'
+      if: inputs.destroy == true
       working-directory: ./deploy/terraform
       run: |
         terraform destroy -auto-approve \
