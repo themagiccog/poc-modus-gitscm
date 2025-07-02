@@ -96,10 +96,13 @@
     </style>
 </head>
 <body>
-    <div class="logo-container">
-        <img src="{{ url_for('static', filename='images/modus-create.png') }}" class="logo" alt="Indegene Logo">
-    </div>
-    <h1>To-Do List</h1>
+    <header>
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/modus-create.png') }}" class="logo" alt="Indegene Logo">
+        </div>
+    </header>
+
+    <h1>Welcome to the To-Do List App</h1>
         <div>
       <h3> This is message from env: <em>{{ custom_message }}</em> </h3>
       <h5> Deploy Environment: <em>{{ deploy_env }}</em> </h5>
@@ -116,6 +119,9 @@
             </li>
         {% endfor %}
     </ul>
+    <footer style="margin-top: 40px; text-align: center; font-size: 0.9em; color: #666;">
+        Build Version: {{ build_version }}
+    </footer>
 
 </body>
 </html>

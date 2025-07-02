@@ -65,14 +65,19 @@ jobs:
     if: needs.release.outputs.published == 'true'
     environment: production
     env:
-      IMAGE_TAG: ${{ needs.release.outputs.version || 'latest' }}
+      BUILD_VERSION: ${{ needs.release.outputs.version || 'none' }}
       IMAGE: ${{ vars.ACR_NAME }}.azurecr.io/flask-app
       ACR: ${{ vars.ACR_NAME }}.azurecr.io
     steps:
       - uses: actions/checkout@v4
 
+      - name: Get current date-time
+        run: |
+          echo "BUILD_TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_ENV
       - name: Echo version
-        run: echo "Image tag is $IMAGE_TAG"
+        run: |
+          echo "Image tag is $BUILD_VERSION"
+          echo "Build timestamp is $BUILD_TIMESTAMP"
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -98,17 +103,17 @@ jobs:
 
       - name: Push Docker image to ACR
         run: |
-          echo "Image Tag: ${IMAGE_TAG}, ${{ env.IMAGE_TAG }}"  
-          echo "New release: ${{ needs.release.outputs.published }}" 
-          docker tag flask-app:${{ github.sha }} $ACR/flask-app:${{ env.IMAGE_TAG }}
-          docker push ${{ env.ACR }}/flask-app:${{ env.IMAGE_TAG }}
+          echo "Image Tag/Build version: $BUILD_VERSION"  
+          echo "New release (T/F): ${{ needs.release.outputs.published }}" 
+          docker tag flask-app:${{ github.sha }} $ACR/flask-app:${{ env.BUILD_VERSION }}
+          docker push ${{ env.ACR }}/flask-app:${{ env.BUILD_VERSION }}
 
   deploy:
     needs: [release, build]
     runs-on: ubuntu-latest
     environment: production
     env:
-      IMAGE_TAG: ${{ needs.release.outputs.version }}
+      BUILD_VERSION: ${{ needs.release.outputs.version }}
       IMAGE: ${{ vars.ACR_NAME }}.azurecr.io/flask-app
       ACR: ${{ vars.ACR_NAME }}.azurecr.io
     steps:
@@ -116,8 +121,15 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Set Web App Environment Variables
+        run: |
+          az webapp config appsettings set \
+            --name ${{ vars.AZURE_WEBAPP_NAME }} \
+            --resource-group ${{ vars.RESOURCE_GROUP }} \
+            --settings CUSTOM_MESSAGE=$(git log -1 --pretty=%B) DEPLOY_ENV=${{ job.environment }} BUILD_VERSION=${{ env.BUILD_VERSION }}
+
       - name: Deploy to Azure Web App (Linux Container)
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ vars.AZURE_WEBAPP_NAME }}
-          images: ${{ env.ACR }}/flask-app:${{ env.IMAGE_TAG }}
+          images: ${{ env.ACR }}/flask-app:${{ env.BUILD_VERSION }}

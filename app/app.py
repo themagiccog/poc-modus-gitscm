@@ -15,6 +15,7 @@ todos = []
 # Access the CUSTOM_MESSAGE environment variable
 custom_message = os.getenv("CUSTOM_MESSAGE", "No custom message set.")
 deploy_env = os.getenv("DEPLOY_ENV", "No deploy env set.")
+build_version = os.getenv("BUILD_VERSION", "No build version set.")
 
 logging.info(
     f"Starting Flask app with CUSTOM_MESSAGE='{custom_message}' "
