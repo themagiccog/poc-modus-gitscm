@@ -24,6 +24,12 @@ data "azurerm_container_registry" "acr" {
 
 }
 
+# Get User Managed Identity
+data "azurerm_user_assigned_identity" "identity" {
+  provider            = azurerm.state
+  name                = "core-resources-umi"
+  resource_group_name = "core-rg"
+}
 
 resource "azurerm_service_plan" "plan" {
   provider            = azurerm.infra
@@ -45,6 +51,11 @@ resource "azurerm_linux_web_app" "app" {
   resource_group_name = azurerm_resource_group.rg.name
   service_plan_id     = azurerm_service_plan.plan.id
 
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [data.azurerm_user_assigned_identity.identity.id]
+  }
+
   site_config {
     container_registry_use_managed_identity = false
     always_on               = false
@@ -52,14 +63,12 @@ resource "azurerm_linux_web_app" "app" {
     application_stack {
       docker_image_name     = "${data.azurerm_container_registry.acr.login_server}/flask-app:0.0.1"
       docker_registry_url   = "https://${data.azurerm_container_registry.acr.login_server}"
-      docker_registry_username = data.azurerm_container_registry.acr.admin_username
-      docker_registry_password = data.azurerm_container_registry.acr.admin_password
+      ## Below not needed as we are using Managed Identity
+      # docker_registry_username = data.azurerm_container_registry.acr.admin_username
+      # docker_registry_password = data.azurerm_container_registry.acr.admin_password
     }
   }
 
-  # lifecycle {
-  #   ignore_changes = [ site_config[0].linux_fx_version ]
-  # }
 
   app_settings = {
     WEBSITES_PORT = "8000"
