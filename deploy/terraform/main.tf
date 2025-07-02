@@ -57,9 +57,9 @@ resource "azurerm_linux_web_app" "app" {
     }
   }
 
-  lifecycle {
-    ignore_changes = [ site_config[0].linux_fx_version ]
-  }
+  # lifecycle {
+  #   ignore_changes = [ site_config[0].linux_fx_version ]
+  # }
 
   app_settings = {
     WEBSITES_PORT = "8000"
