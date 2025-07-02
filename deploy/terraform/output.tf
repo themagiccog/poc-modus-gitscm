@@ -9,3 +9,7 @@ output "webapp_url" {
 output "image_url" {
   value = "${data.azurerm_container_registry.acr.login_server}/flask-app:latest"
 }
+
+output "umi_identity" {
+  value = data.azurerm_user_assigned_identity.identity.id
+}
