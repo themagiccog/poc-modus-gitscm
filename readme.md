@@ -320,11 +320,97 @@ provider "azurerm" {
 }
 ```
 
-**Purpose**: Defines Azure Resource Manager providers
+**Purpose**: Defines Azure Resource Manager providers with dual-subscription architecture
 
-- **`infra` Provider**: For deploying application infrastructure with explicit credentials
-- **`state` Provider**: For accessing existing shared resources (uses environment variables)
-- **Dual Provider Setup**: Enables cross-subscription resource access
+**Why Two Providers?**
+
+This configuration implements a **multi-subscription architecture** that separates concerns between shared/core resources and application-specific resources:
+
+**🏢 `infra` Provider (Target Subscription)**
+
+- **Purpose**: Deploys application-specific resources (Web App, App Service Plan, Resource Group)
+- **Authentication**: Uses explicit service principal credentials from variables
+- **Scope**: Limited to the target subscription where the application will be deployed
+- **Permissions**: Contributor role on the target subscription only
+- **Use Case**: Creates new resources that belong to this specific application
+
+**🔒 `state` Provider (Core/Shared Subscription)**
+
+- **Purpose**: Accesses existing shared resources and manages Terraform state
+- **Authentication**: Uses environment variables (ARM_CLIENT_ID, ARM_CLIENT_SECRET, etc.)
+- **Scope**: Access to the core subscription containing shared infrastructure
+- **Resources Accessed**:
+  - **Terraform State Storage**: Azure Blob Storage (`tfstatestorage13543`)
+  - **Container Registry**: Shared ACR (`az4africa`) for multiple applications
+  - **Managed Identity**: Shared User-Assigned Managed Identity (`core-resources-umi`)
+- **Benefits**: Centralized shared resources, cost optimization, consistent security
+
+**Multi-Subscription Architecture Benefits:**
+
+1. **🔐 Security Isolation**
+   - Application deployments can't accidentally modify shared infrastructure
+   - Blast radius limitation: issues in one app don't affect others
+   - Different access levels for different resource types
+
+2. **💰 Cost Management**
+   - Shared resources (ACR, UMI) used by multiple applications
+   - Separate billing for different environments/applications
+   - Centralized cost control for shared services
+
+3. **🏗️ Operational Excellence**
+   - Central team manages shared infrastructure
+   - Application teams manage their own resources
+   - Clear ownership boundaries
+
+4. **📊 State Management**
+   - Terraform state stored in secure, shared location
+   - Multiple applications can share the same state storage
+   - Centralized backup and disaster recovery
+
+**Resource Access Pattern:**
+```text
+┌─────────────────────────────────────────────────────────────┐
+│                    Azure Tenant                             │
+├─────────────────────────────────────────────────────────────┤
+│  ┌─────────────────────────┐  ┌─────────────────────────────┐ │
+│  │  Core Subscription      │  │  Application Subscription   │ │
+│  │  (state provider)       │  │  (infra provider)          │ │
+│  │                         │  │                            │ │
+│  │ ┌─────────────────────┐ │  │ ┌─────────────────────────┐ │ │
+│  │ │     core-rg         │ │  │ │   modus-create-rg       │ │ │
+│  │ │                     │ │  │ │                         │ │ │
+│  │ │ • ACR (az4africa)   │◄┼──┼─┤ • App Service Plan     │ │ │
+│  │ │ • UMI (core-res-umi)│◄┼──┼─┤ • Linux Web App        │ │ │
+│  │ │ • TF State Storage  │◄┼──┼─┤ • Resource Group       │ │ │
+│  │ │                     │ │  │ │                         │ │ │
+│  │ └─────────────────────┘ │  │ └─────────────────────────┘ │ │
+│  └─────────────────────────┘  └─────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Authentication Flow:**
+1. **State Provider**: Uses environment variables set by GitHub Actions
+2. **Infra Provider**: Uses service principal credentials passed as Terraform variables
+3. **Cross-Subscription Access**: Managed Identity from core subscription used by Web App in target subscription
+
+**Configuration Examples:**
+
+In your CI/CD pipeline, you would set:
+```bash
+# For state provider (environment variables)
+ARM_CLIENT_ID=${{ secrets.STATE_CLIENT_ID }}
+ARM_CLIENT_SECRET=${{ secrets.STATE_CLIENT_SECRET }}
+ARM_SUBSCRIPTION_ID=${{ secrets.STATE_SUBSCRIPTION_ID }}
+ARM_TENANT_ID=${{ secrets.STATE_TENANT_ID }}
+
+# For infra provider (Terraform variables)
+-var="infra_client_id=${{ secrets.ARM_CLIENT_ID }}"
+-var="infra_client_secret=${{ secrets.ARM_CLIENT_SECRET }}"
+-var="infra_subscription_id=${{ secrets.ARM_SUBSCRIPTION_ID }}"
+-var="infra_tenant_id=${{ secrets.ARM_TENANT_ID }}"
+```
+
+This architecture enables **enterprise-grade separation of concerns** while maintaining operational efficiency and security best practices.
 
 #### 📋 `variables.tf` - Input Variables
 
@@ -451,7 +537,7 @@ resource "azurerm_linux_web_app" "app" {
 }
 ```
 
-**Key Components**:
+**🔑 Key Components**:
 
 - **Resource Group**: Container for all application resources
 - **App Service Plan**: Compute resources (F1 Free tier for cost optimization)
@@ -539,7 +625,7 @@ output "umi_identity" {
 - **State Locking**: Prevents concurrent modifications
 - **Versioning**: State file versioning for rollback capabilities
 
-### Deployment Prerequisites
+### ⚙️ Deployment Prerequisites
 
 Before running Terraform, ensure you have:
 
