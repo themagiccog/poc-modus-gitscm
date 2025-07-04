@@ -38,9 +38,9 @@ This project demonstrates a complete web application stack with:
 
 ```text
 modus-create-poc/
-├── app/                    # Main application code
-│   ├── app.py             # Flask application
-│   ├── requirements.txt   # Python dependencies
+├── app/                  # Main application code
+│   ├── app.py            # Flask application
+│   ├── requirements.txt  # Python dependencies
 │   ├── test_app.py       # Unit tests
 │   ├── static/           # Static assets
 │   │   └── images/       # Image files
@@ -56,9 +56,9 @@ modus-create-poc/
 ├── scripts/              # Utility scripts
 │   └── tag_release.sh    # Release tagging script
 ├── docs/                 # Documentation
-├── Dockerfile           # Container configuration
-├── version.txt          # Application version
-└── README.md           # This file
+├── Dockerfile            # Container configuration
+├── version.txt           # Application version
+└── README.md             # This file
 ```
 
 ## 🏗️ CI/CD Pipeline
@@ -274,9 +274,9 @@ deploy/terraform/
 ├── backend.tf          # Remote state configuration
 ├── provider.tf         # Azure provider configuration
 ├── variables.tf        # Input variable definitions
-├── main.tf            # Core resource definitions
-├── output.tf          # Output value definitions
-└── steps              # Setup instructions
+├── main.tf             # Core resource definitions
+├── output.tf           # Output value definitions
+└── steps               # Setup instructions
 ```
 
 ### File Breakdown
@@ -368,27 +368,29 @@ This configuration implements a **multi-subscription architecture** that separat
    - Centralized backup and disaster recovery
 
 **Resource Access Pattern:**
+
 ```text
 ┌─────────────────────────────────────────────────────────────┐
 │                    Azure Tenant                             │
 ├─────────────────────────────────────────────────────────────┤
-│  ┌─────────────────────────┐  ┌─────────────────────────────┐ │
-│  │  Core Subscription      │  │  Application Subscription   │ │
-│  │  (state provider)       │  │  (infra provider)          │ │
-│  │                         │  │                            │ │
-│  │ ┌─────────────────────┐ │  │ ┌─────────────────────────┐ │ │
-│  │ │     core-rg         │ │  │ │   modus-create-rg       │ │ │
-│  │ │                     │ │  │ │                         │ │ │
-│  │ │ • ACR (az4africa)   │◄┼──┼─┤ • App Service Plan     │ │ │
-│  │ │ • UMI (core-res-umi)│◄┼──┼─┤ • Linux Web App        │ │ │
-│  │ │ • TF State Storage  │◄┼──┼─┤ • Resource Group       │ │ │
-│  │ │                     │ │  │ │                         │ │ │
-│  │ └─────────────────────┘ │  │ └─────────────────────────┘ │ │
-│  └─────────────────────────┘  └─────────────────────────────┘ │
+│  ┌─────────────────────────┐  ┌───────────────────────────┐ │
+│  │  Core Subscription      │  │  Application Subscription │ │
+│  │  (state provider)       │  │  (infra provider)         │ │
+│  │                         │  │                           │ │
+│  │ ┌─────────────────────┐ │  │ ┌───────────────────────┐ │ │
+│  │ │     core-rg         │ │  │ │   modus-create-rg     │ │ │
+│  │ │                     │ │  │ │                       │ │ │
+│  │ │ • ACR (az4africa)   │◄┼──┼─┤ • App Service Plan    │ │ │
+│  │ │ • UMI (core-res-umi)│◄┼──┼─┤ • Linux Web App       │ │ │
+│  │ │ • TF State Storage  │◄┼──┼─┤ • Resource Group      │ │ │
+│  │ │                     │ │  │ │                       │ │ │
+│  │ └─────────────────────┘ │  │ └───────────────────────┘ │ │
+│  └─────────────────────────┘  └───────────────────────────┘ │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 **Authentication Flow:**
+
 1. **State Provider**: Uses environment variables set by GitHub Actions
 2. **Infra Provider**: Uses service principal credentials passed as Terraform variables
 3. **Cross-Subscription Access**: Managed Identity from core subscription used by Web App in target subscription
@@ -396,6 +398,7 @@ This configuration implements a **multi-subscription architecture** that separat
 **Configuration Examples:**
 
 In your CI/CD pipeline, you would set:
+
 ```bash
 # For state provider (environment variables)
 ARM_CLIENT_ID=${{ secrets.STATE_CLIENT_ID }}
